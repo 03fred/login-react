@@ -9,7 +9,7 @@ const RoutesPrivate = ({ component: Component, ...rest}) => {
     return (
         <Route
         {... rest}
-        render={() => token 
+          render={() => token.token 
          ? <Component {...rest}/>
          : <Redirect to="/login"/>
         }

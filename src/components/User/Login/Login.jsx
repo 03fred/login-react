@@ -2,19 +2,14 @@ import React, {useState, useContext} from 'react';
 import { useHistory } from 'react-router-dom';
 import StoreContext from 'components/Store/Context';
 import UIButton from 'components/UI/Button/Button';
+import Swal from 'sweetalert2'
+
+import api from 'utils/api';
 
 import './Login.css';
 
 function initialState(){
  return {email: '' , password: ''};
-}
-
-function login(user){
-  if(user.email === 'admin' && user.password === 'admin'){
-    return {token :  '1234'};
-  }
-
-  return {Error: 'Usuário ou senha inválido'};
 }
 
 const UserLogin = () => {
@@ -33,16 +28,51 @@ const UserLogin = () => {
 
   }
 
-  function onSubmit(event){
-     event.preventDefault();
-     const {token} = login(values);
-     console.log(token);
-     if(token){
-          setToken(token);
-          history.push('/');
+   function formatMessage(response)
+   {
+     console.log(response.error.length);
+     if(typeof response === 'object'){
+      let message = "";
+      for(let i = 0; i <= response.error.length; i++){
+         message += response.error[i] ? response.error[i] : "";
+       }
+       return message;
      }
 
-     setValues(initialState);
+     return response;
+   }
+
+   function onSubmit(event){
+     event.preventDefault();
+     Swal.fire({
+      title: 'Processando ...',
+      timerProgressBar: true,
+      onBeforeOpen: () => {
+          Swal.showLoading()
+      }
+    });
+
+     try {
+         api.post('http://localhost:4000/login', values)
+         .then((response) => {
+          setToken(response.data.token);
+          history.push('/');
+          Swal.close()
+        })
+        .catch((error) => {
+          if (error.response){
+            Swal.fire({
+              icon: 'error',
+              title: formatMessage(error.response.data)
+          })
+          
+        }
+          setValues(initialState);
+        })
+
+     } catch (err) {
+         alert(err);
+     }
   }
 
   return (
