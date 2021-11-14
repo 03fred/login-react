@@ -4,6 +4,8 @@ import './index.css';
 import Root from './pages/Root';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../node_modules/react-vis/dist/style.css';
+
 
 ReactDOM.render(<Root />, document.getElementById('root'));
 
