@@ -17,12 +17,39 @@ import Header from '../Header/Header';
 import { Card, CardBody } from 'reactstrap';
 
 import './Home.css';
+import api from 'utils/api';
 
 class Home extends React.Component {
   
   state = {
     useCanvas: false
   };
+
+  constructor(props){
+    super(props);
+      this.processData();
+  }
+
+  
+  processData(){
+    try {
+    api.get('http://localhost:4000/goal-control?dateInitial=2021-01-01 00:00&dateFinal=2021-12-12 00:00')
+          .then((response) => {
+           const data  = response.data.data.map((e, i) => ({
+              x: i,
+              y: e.status
+            }));
+            this.setState({ processData: data });
+         })
+         .catch((error) => {
+           console.log(error);
+           
+         });
+        } catch (err) {
+          alert(err);
+      }
+    
+  }
   
   render() {
     const {useCanvas} = this.state;
@@ -63,9 +90,22 @@ class Home extends React.Component {
                   />
                 <Line
                   className="first-series"
-                  data={[{x: 1, y: 3}, {x: 2, y: 5}, {x: 3, y: 15}, {x: 4, y: 12}]}
+                  data={this.state.processData}
                 />
-                <Line className="second-series" data={null} />
+               
+              </XYPlot>
+           </CardBody>
+         </Card>
+        <Footer/>
+      </div>
+    )
+ }
+}
+
+export default Home;
+/*
+
+ <Line className="second-series" data={null} />
                 <Line
                   className="third-series"
                   curve={'curveMonotoneX'}
@@ -81,13 +121,5 @@ class Home extends React.Component {
                   }}
                   data={[{x: 1, y: 7}, {x: 2, y: 11}, {x: 3, y: 9}, {x: 4, y: 2}]}
                 />
-              </XYPlot>
-           </CardBody>
-         </Card>
-        <Footer/>
-      </div>
-    )
- }
-}
 
-export default Home;
+*/

@@ -15,8 +15,6 @@ import {
 export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
-
     this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false

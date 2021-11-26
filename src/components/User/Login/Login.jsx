@@ -5,6 +5,7 @@ import UIButton from 'components/UI/Button/Button';
 import Swal from 'sweetalert2'
 
 import './Login.css';
+import api from 'utils/api';
 
 function initialState(){
  return {email: '' , password: ''};
@@ -51,7 +52,7 @@ const UserLogin = () => {
     });
 
      try {
-     /*  api.post('http://localhost:4000/login', values)
+      api.post('http://localhost:4000/login', values)
          .then((response) => {
           setToken(response.data.token);
           history.push('/');
@@ -66,10 +67,10 @@ const UserLogin = () => {
           
         }
           setValues(initialState);
-        })*/
+        }); /*
         setToken('aaaaaaaaaaaaaaa');
         history.push('/');
-        Swal.close()
+        Swal.close()*/
      } catch (err) {
          alert(err);
      }
